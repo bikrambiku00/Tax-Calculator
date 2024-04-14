@@ -7,6 +7,9 @@ To calculate your taxes fill out the form and know it by yourself
 ## 🛠 Skills
 Javascript, HTML, CSS...
 
+### link-to-the-web-server
+http://127.0.0.1:5500/tax.html
+
 ![Screenshot (238)](https://github.com/bikrambiku00/Tax-Calculator/assets/157112149/639118ab-e40a-4f34-bcdd-1610317b222e)
 
 ![Screenshot (236)](https://github.com/bikrambiku00/Tax-Calculator/assets/157112149/9b4e44b5-c283-4246-b5df-f857386f949b)
