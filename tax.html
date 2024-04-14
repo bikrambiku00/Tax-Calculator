@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tax Calculator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #f5f5f5;
+    }
+    .container {
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      width: 400px;
+      padding: 20px;
+    }
+    .form-group {
+      margin-bottom: 20px;
+    }
+    .form-group label {
+      font-weight: bold;
+      display: block;
+      margin-bottom: 5px;
+    }
+    .form-group input[type="number"],
+    .form-group select {
+      width: calc(100% - 22px);
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    .error-icon {
+      display: none;
+      margin-left: 5px;
+    }
+    .error-icon:hover + .tooltip {
+      display: block;
+    }
+    .tooltip {
+      display: none;
+      position: absolute;
+      background-color: #f44336;
+      color: #fff;
+      padding: 8px;
+      border-radius: 4px;
+      white-space: nowrap;
+    }
+    button {
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      width: 100%;
+    }
+    /* Modal styling */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0,0,0,0.4);
+    }
+    .modal-content {
+      background-color: #fefefe;
+      margin: 15% auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%;
+      border-radius: 8px;
+    }
+    .close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+    }
+    .close:hover,
+    .close:focus {
+      color: black;
+      text-decoration: none;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <form id="taxForm">
+      <div class="form-group">
+        <label for="age">Age:</label>
+        <select id="age" name="age">
+          <option value="<40">&lt; 40</option>
+          <option value=">=40&<60">&ge; 40 &amp; &lt; 60</option>
+          <option value=">=60">&ge; 60</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="income">Gross Annual Income:</label>
+        <input type="number" id="income" name="income">
+        <span class="error-icon">&#9888;<span class="tooltip">Invalid input</span></span>
+      </div>
+      <div class="form-group">
+        <label for="extraIncome">Extra Income:</label>
+        <input type="number" id="extraIncome" name="extraIncome">
+        <span class="error-icon">&#9888;<span class="tooltip">Invalid input</span></span>
+      </div>
+      <div class="form-group">
+        <label for="deductions">Deductions:</label>
+        <input type="number" id="deductions" name="deductions">
+        <span class="error-icon">&#9888;<span class="tooltip">Invalid input</span></span>
+      </div>
+      <button type="button" onclick="calculateTax()">Submit</button>
+    </form>
+  </div>
+
+  <div id="myModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <p id="result"></p>
+    </div>
+  </div>
+
+  <script>
+    function calculateTax() {
+      const age = document.getElementById('age').value;
+      const income = parseFloat(document.getElementById('income').value);
+      const extraIncome = parseFloat(document.getElementById('extraIncome').value);
+      const deductions = parseFloat(document.getElementById('deductions').value);
+
+      if (isNaN(income) || isNaN(extraIncome) || isNaN(deductions)) {
+        alert('Please enter valid numbers.');
+        return;
+      }
+
+      let taxRate;
+      if (age === '<40') {
+        taxRate = 0.3;
+      } else if (age === '>=40&<60') {
+        taxRate = 0.4;
+      } else {
+        taxRate = 0.1;
+      }
+
+      const totalIncome = income + extraIncome - deductions;
+      let tax = 0;
+      if (totalIncome > 800000) {
+        tax = taxRate * (totalIncome - 800000);
+      }
+
+      document.getElementById('result').textContent = `Tax Amount: ${tax.toFixed(2)} Lakhs`;
+      document.getElementById('myModal').style.display = 'block';
+    }
+
+    document.querySelector('.close').addEventListener('click', function() {
+      document.getElementById('myModal').style.display = 'none';
+    });
+
+    window.addEventListener('click', function(event) {
+      const modal = document.getElementById('myModal');
+      if (event.target === modal) {
+        modal.style.display = 'none';
+      }
+    });
+
+    const inputs = document.querySelectorAll('input[type="number"]');
+    inputs.forEach(input => {
+      input.addEventListener('input', function() {
+        if (isNaN(this.value)) {
+          this.nextElementSibling.style.display = 'inline-block';
+        } else {
+          this.nextElementSibling.style.display = 'none';
+        }
+      });
+    });
+
+    document.getElementById('age').addEventListener('change', function() {
+      if (this.value === '') {
+        this.nextElementSibling.style.display = 'inline-block';
+      } else {
+        this.nextElementSibling.style.display = 'none';
+      }
+    });
+
+  </script>
+</body>
+</html>
